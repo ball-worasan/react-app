@@ -1,73 +1,64 @@
-// App.js
-import React, { useState } from "react";
-import Button from "./Button";
-import "./App.css"; // นำเข้าไฟล์ CSS
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import DashboardLayout from './pages/Dashboard';
+import Profile from './pages/Profile';
+import Users from './pages/Users';
+import './styles/App.css';
 
-function App() {
-  const [employees, setEmployees] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      age: 30,
-      message: "",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      age: 25,
-      message: "",
-    },
-    {
-      id: 3,
-      name: "Alice Johnson",
-      email: "alice@example.com",
-      age: 28,
-      message: "",
-    },
-  ]);
+const App = () => {
+    return (
+        <Router>
+            <header className="header flex justify-between items-center p-4 bg-gray-800 text-white">
+                <h1 className="text-2xl font-bold">My Worasan</h1>
+                <nav className="navbar space-x-4">
+                    <Link to="/" className="hover:text-gray-300">Home</Link>
+                    <Link to="/about" className="hover:text-gray-300">About</Link>
+                    <Link to="/contact" className="hover:text-gray-300">Contact</Link>
+                </nav>
+                <div className="auth-buttons space-x-4">
+                    <Link to="/signin">
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                            Sign In
+                        </button>
+                    </Link>
+                    <Link to="/signup">
+                        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                            Sign Up
+                        </button>
+                    </Link>
+                    <Link to="/dashboard">
+                        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                            Dashboard
+                        </button>
+                    </Link>
+                    <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                        Logout
+                    </button>
+                </div>
+            </header>
 
-  const handleOkClick = (id) => {
-    setEmployees((prevEmployees) =>
-      prevEmployees.map((employee) =>
-        employee.id === id ? { ...employee, message: "OK clicked!" } : employee
-      )
+            <div className="mx-auto">
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/signin" element={<SignIn />} />
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/signup" element={<SignUp />} />
+
+                    {/* กำหนดเส้นทางสำหรับ Dashboard */}
+                    <Route path="/dashboard" element={<DashboardLayout />}>
+                        <Route path="profile" element={<Profile />} />
+                        <Route path="users" element={<Users />} />
+                    </Route>
+                </Routes>
+            </div>
+        </Router>
     );
-    console.log(`OK clicked for employee ID: ${id}`);
-  };
-
-  const handleCancelClick = (id) => {
-    setEmployees((prevEmployees) =>
-      prevEmployees.map((employee) =>
-        employee.id === id ? { ...employee, message: "" } : employee
-      )
-    );
-    console.log(`Cancel clicked for employee ID: ${id}`);
-  };
-
-  return (
-    <div className="App">
-      <h1>Hello Worasan</h1>
-      {employees.map((employee) => (
-        <div key={employee.id} className="employee-card">
-          <div className="employee-info">
-            <h2>{employee.name}</h2>
-            <p>Email: {employee.email}</p>
-            <p>Age: {employee.age}</p>
-          </div>
-          <div className="button-group">
-            <Button text="OK" onClick={() => handleOkClick(employee.id)} />
-            <Button
-              text="Cancel"
-              onClick={() => handleCancelClick(employee.id)}
-            />
-          </div>
-          {employee.message && <p className="message">{employee.message}</p>}
-        </div>
-      ))}
-    </div>
-  );
-}
+};
 
 export default App;
